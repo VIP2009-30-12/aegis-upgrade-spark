@@ -10,33 +10,141 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ContactsRouteImport } from './routes/contacts'
+import { Route as HelpRouteImport } from './routes/help'
+import { Route as HistoryRouteImport } from './routes/history'
+import { Route as JourneyRouteImport } from './routes/journey'
+import { Route as SessionsRouteImport } from './routes/sessions'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SosRouteImport } from './routes/sos'
+import { Route as WalkRouteImport } from './routes/walk'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactsRoute = ContactsRouteImport.update({
+  id: '/contacts',
+  path: '/contacts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoryRoute = HistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JourneyRoute = JourneyRouteImport.update({
+  id: '/journey',
+  path: '/journey',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SessionsRoute = SessionsRouteImport.update({
+  id: '/sessions',
+  path: '/sessions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SosRoute = SosRouteImport.update({
+  id: '/sos',
+  path: '/sos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WalkRoute = WalkRouteImport.update({
+  id: '/walk',
+  path: '/walk',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/contacts': typeof ContactsRoute
+  '/help': typeof HelpRoute
+  '/history': typeof HistoryRoute
+  '/journey': typeof JourneyRoute
+  '/sessions': typeof SessionsRoute
+  '/settings': typeof SettingsRoute
+  '/sos': typeof SosRoute
+  '/walk': typeof WalkRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/contacts': typeof ContactsRoute
+  '/help': typeof HelpRoute
+  '/history': typeof HistoryRoute
+  '/journey': typeof JourneyRoute
+  '/sessions': typeof SessionsRoute
+  '/settings': typeof SettingsRoute
+  '/sos': typeof SosRoute
+  '/walk': typeof WalkRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/contacts': typeof ContactsRoute
+  '/help': typeof HelpRoute
+  '/history': typeof HistoryRoute
+  '/journey': typeof JourneyRoute
+  '/sessions': typeof SessionsRoute
+  '/settings': typeof SettingsRoute
+  '/sos': typeof SosRoute
+  '/walk': typeof WalkRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/contacts'
+    | '/help'
+    | '/history'
+    | '/journey'
+    | '/sessions'
+    | '/settings'
+    | '/sos'
+    | '/walk'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/contacts'
+    | '/help'
+    | '/history'
+    | '/journey'
+    | '/sessions'
+    | '/settings'
+    | '/sos'
+    | '/walk'
+  id:
+    | '__root__'
+    | '/'
+    | '/contacts'
+    | '/help'
+    | '/history'
+    | '/journey'
+    | '/sessions'
+    | '/settings'
+    | '/sos'
+    | '/walk'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ContactsRoute: typeof ContactsRoute
+  HelpRoute: typeof HelpRoute
+  HistoryRoute: typeof HistoryRoute
+  JourneyRoute: typeof JourneyRoute
+  SessionsRoute: typeof SessionsRoute
+  SettingsRoute: typeof SettingsRoute
+  SosRoute: typeof SosRoute
+  WalkRoute: typeof WalkRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +156,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contacts': {
+      id: '/contacts'
+      path: '/contacts'
+      fullPath: '/contacts'
+      preLoaderRoute: typeof ContactsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/history': {
+      id: '/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journey': {
+      id: '/journey'
+      path: '/journey'
+      fullPath: '/journey'
+      preLoaderRoute: typeof JourneyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sessions': {
+      id: '/sessions'
+      path: '/sessions'
+      fullPath: '/sessions'
+      preLoaderRoute: typeof SessionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sos': {
+      id: '/sos'
+      path: '/sos'
+      fullPath: '/sos'
+      preLoaderRoute: typeof SosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/walk': {
+      id: '/walk'
+      path: '/walk'
+      fullPath: '/walk'
+      preLoaderRoute: typeof WalkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ContactsRoute: ContactsRoute,
+  HelpRoute: HelpRoute,
+  HistoryRoute: HistoryRoute,
+  JourneyRoute: JourneyRoute,
+  SessionsRoute: SessionsRoute,
+  SettingsRoute: SettingsRoute,
+  SosRoute: SosRoute,
+  WalkRoute: WalkRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
