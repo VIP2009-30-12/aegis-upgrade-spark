@@ -37,7 +37,7 @@ function Row({ icon, title, state, children }: { icon: ReactNode; title: string;
 function AlertDetail({ a }: { a: Alert | undefined }) {
   const t = useT();
   if (!a) return <p className="text-muted-foreground">{t("not_needed")}</p>;
-  if (!a.recipients.length) return <p className="text-muted-foreground">{t("no_contacts")}</p>;
+  if (!a.recipients.length) return <p className="text-muted-foreground">{a.kind === "sos_location" ? `${t("not_needed")} — ${t("r_location")}: 0` : t("no_contacts")}</p>;
   const failed = a.recipients.some((r) => r.status === "failed");
   return (
     <>
