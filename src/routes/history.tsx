@@ -30,7 +30,7 @@ function HistoryPage() {
   const log = useAegis((s) => s.log);
   const alerts = useAegis((s) => s.alerts);
   const [f, setF] = useState<keyof typeof groups>("all");
-  const rows = f === "all" ? log : log.filter((e) => groups[f].includes(e.type));
+  const rows = f === "all" ? log : log.filter((e) => (groups[f] ?? []).includes(e.type));
   return (
     <div className="space-y-4">
       <PageTitle>{t("history")}</PageTitle>

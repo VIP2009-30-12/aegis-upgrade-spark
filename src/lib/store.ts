@@ -15,14 +15,14 @@ export type Contact = {
 export type AlertKind = "sos" | "sos_location" | "missed_checkin" | "manual";
 export type Recipient = { contactId: string; name: string; channel: "sms"; status: DeliveryStatus };
 export type Alert = {
-  id: string; kind: AlertKind; createdAt: number; sessionId?: string; sosId?: string;
+  id: string; kind: AlertKind; createdAt: number; sessionId?: string | undefined; sosId?: string | undefined;
   recipients: Recipient[]; location: Loc | null; locationStale: boolean;
 };
 export type SessionType = "walk" | "journey";
 export type Session = {
   id: string; type: SessionType; status: "active" | "completed" | "cancelled";
   startedAt: number; endedAt?: number; intervalMin: number | null; nextCheckInAt: number | null;
-  graceMin: number; destination?: string; eta?: string; shareLocation: boolean;
+  graceMin: number; destination?: string | undefined; eta?: string | undefined; shareLocation: boolean;
   escalatedFor: number | null;
 };
 export type LocStatus = "pending" | "acquired" | "unavailable" | "consent_off";
@@ -200,7 +200,7 @@ export function endSOS() { set((s) => ({ ...s, sos: s.sos.map((x) => ({ ...x, ac
 export function activeSession(s: State) { return s.sessions.find((x) => x.status === "active") ?? null; }
 
 export function startSession(p: {
-  type: SessionType; intervalMin: number | null; graceMin: number; destination?: string; eta?: string; shareLocation: boolean;
+  type: SessionType; intervalMin: number | null; graceMin: number; destination?: string | undefined; eta?: string | undefined; shareLocation: boolean;
 }): boolean {
   if (activeSession(load())) return false;
   const now = Date.now();
