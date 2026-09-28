@@ -45,11 +45,11 @@ export function PhoneCodeForm({
       }}>
         <div className="grid grid-cols-[auto_1fr] gap-2">
           <label className="sr-only" htmlFor="cc">{t("country")}</label>
-          <select id="cc" className="input-aegis" value={country} onChange={(e) => setCountry(e.target.value as CountryCode)}>
+          <select id="cc" className="field" value={country} onChange={(e) => setCountry(e.target.value as CountryCode)}>
             {COUNTRIES.map((c) => <option key={c.code} value={c.code}>{c.label}</option>)}
           </select>
           <label className="sr-only" htmlFor="ph">{t(phoneLabel)}</label>
-          <input id="ph" className="input-aegis" inputMode="tel" autoComplete="tel-national" placeholder={t(phoneLabel)}
+          <input id="ph" className="field" inputMode="tel" autoComplete="tel-national" placeholder={t(phoneLabel)}
             value={raw} onChange={(e) => setRaw(e.target.value)} />
         </div>
         {err && <p role="alert" className="text-sm text-danger">{t(err)}</p>}
@@ -68,7 +68,7 @@ export function PhoneCodeForm({
       if (r) setErr(r);
     }}>
       <label htmlFor="otp" className="text-sm font-semibold">{t("code_sent_to", { p: phone })}</label>
-      <input id="otp" className="input-aegis text-center text-2xl tracking-[0.5em]" inputMode="numeric" autoComplete="one-time-code"
+      <input id="otp" className="field text-center text-2xl tracking-[0.5em]" inputMode="numeric" autoComplete="one-time-code"
         maxLength={6} value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))} aria-label={t("code_label")} />
       {err && <p role="alert" className="text-sm text-danger">{t(err)}</p>}
       <button className="btn btn-safe w-full" disabled={busy || code.length !== 6}>{t("verify")}</button>

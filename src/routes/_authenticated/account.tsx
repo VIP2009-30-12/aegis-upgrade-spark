@@ -57,7 +57,7 @@ function AccountPage() {
           const { error } = await supabase.from("profiles").upsert({ id: user.id, display_name: name.trim().slice(0, 80) || null });
           if (error) toast.error(t("generic_error")); else toast.success(t("saved"));
         }}>
-          <input className="input-aegis flex-1" placeholder={t("display_name")} aria-label={t("display_name")} maxLength={80}
+          <input className="field flex-1" placeholder={t("display_name")} aria-label={t("display_name")} maxLength={80}
             value={name} onChange={(e) => setName(e.target.value)} />
           <button className="btn btn-soft">{t("save")}</button>
         </form>
@@ -74,7 +74,7 @@ function AccountPage() {
           const { error } = await supabase.auth.updateUser({ email }, { emailRedirectTo: `${window.location.origin}/account` });
           if (error) toast.error(t(authErrorKey(error))); else setEmailSent(email);
         }}>
-          <input className="input-aegis flex-1" type="email" placeholder={t("email_label")} aria-label={t("email_label")}
+          <input className="field flex-1" type="email" placeholder={t("email_label")} aria-label={t("email_label")}
             value={email} onChange={(e) => setEmail(e.target.value)} />
           <button className="btn btn-soft">{t("save")}</button>
         </form>

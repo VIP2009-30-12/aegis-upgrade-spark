@@ -68,7 +68,7 @@ function AuthPage() {
           await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: false, emailRedirectTo: `${window.location.origin}/account` } });
           setLinkMsg(true);
         }}>
-          <input className="input-aegis flex-1" type="email" autoComplete="email" placeholder={t("email_label")} aria-label={t("email_label")}
+          <input className="field flex-1" type="email" autoComplete="email" placeholder={t("email_label")} aria-label={t("email_label")}
             value={email} onChange={(e) => setEmail(e.target.value)} />
           <button className="btn btn-soft">{t("send_link")}</button>
         </form>
