@@ -13,3 +13,6 @@
 - Phase 1 data lives in `src/lib/store.ts` (typed localStorage store + actions); screens call only its actions so Phase 2 can swap to Lovable Cloud.
 - All UI strings go through `src/lib/i18n.ts` (en/hi/te dictionaries typed against English keys) so no language can miss a string.
 - Help numbers live in `src/data/help.ts` as data, to move into Cloud for no-rebuild edits.
+- Accounts are optional: session via `useSession` in `src/lib/auth.ts`; only `/account` sits under `_authenticated/`, so SOS/help never require login.
+- Profiles are created client-side on first sign-in (upsert own row under RLS), not via triggers on auth tables.
+- Account deletion runs in `src/lib/account.functions.ts` with the verified session user id only.

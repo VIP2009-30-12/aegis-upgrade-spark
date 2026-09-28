@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { Home, ShieldCheck, LifeBuoy, History, Settings as Cog, FlaskConical } from "lucide-react";
+import { Home, ShieldCheck, LifeBuoy, History, Settings as Cog, FlaskConical, UserRound, Smartphone } from "lucide-react";
+import { useSession } from "@/lib/auth";
 import { useAegis, activeSession, checkInSafe, extendTimer, escalateIfOverdue, endSession } from "@/lib/store";
 import { useT } from "@/lib/i18n";
 import { useNow } from "./useNow";
@@ -85,6 +86,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="flex items-center justify-center gap-2 border-b bg-surface px-3 py-1.5 text-xs text-warning">
         <FlaskConical className="size-3.5" aria-hidden /> {t("sandbox")}
       </div>
+      <AccountBadge />
       <main id="main" className="mx-auto w-full max-w-xl px-4 pt-5">{children}</main>
       <CheckInMonitor />
       <nav aria-label="Main" className="fixed inset-x-0 bottom-0 z-40 border-t bg-surface/95 backdrop-blur">
@@ -114,5 +116,19 @@ export function PageTitle({ children, sub }: { children: ReactNode; sub?: ReactN
       <h1 className="text-2xl font-bold">{children}</h1>
       {sub && <p className="mt-1 text-sm text-muted-foreground">{sub}</p>}
     </header>
+  );
+}
+
+function AccountBadge() {
+  const t = useT();
+  const { user, ready } = useSession();
+  if (!ready) return <div className="h-9" aria-hidden />;
+  return (
+    <div className="mx-auto flex max-w-xl justify-end px-4 pt-2">
+      <Link to={user ? "/account" : "/auth"} className={`chip ${user ? "chip-safe" : ""} gap-1`}>
+        {user ? <UserRound className="size-3.5" aria-hidden /> : <Smartphone className="size-3.5" aria-hidden />}
+        {user ? t("acc_cloud") : `${t("acc_local")} · ${t("sign_in")}`}
+      </Link>
+    </div>
   );
 }
