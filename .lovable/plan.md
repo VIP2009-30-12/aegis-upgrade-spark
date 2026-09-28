@@ -1,32 +1,40 @@
-# AEGIS — Build Plan
+# AEGIS Upgrade — Audit and Staged Plan
 
-This project is currently empty, so AEGIS will be built fresh here, in three phases. Each phase is usable on its own.
+## Audit (what exists today)
+- App works fully on the phone with no account: SOS (opens 112 dialer), Quick Walk, Planned Journey, check-ins, trusted contacts, help numbers, history, settings, English/Hindi/Telugu.
+- All data is saved only on the device. No accounts, no server, no real messages. Alerts are labelled "Simulated — not sent".
+- Check-in timers stop when the app is closed.
+- No Android (Capacitor) setup was found in this project, although the brief mentions one. If it lives in the GitHub repo only, it needs to be synced here before Android work.
+- No maps, no CCTV data, no guardian view.
 
-## Phase 1 — The app on your phone (sandbox mode)
-- Dark navy look with teal, gold and restrained red; mobile-first, one-handed, bottom navigation.
-- Home: large hold-to-activate SOS, Quick Walk, Planned Journey, plus active-session banner.
-- SOS: hold ~2s, then in parallel: open the 112 dialer, record alerts to every eligible contact, start GPS. Status screen shows each step separately (call opened / contacts alerted / location acquired / "112 has NOT received your location"). Retry failed alerts. No alarm sound. Duplicate SOS blocked.
-- Quick Walk: one tap, optional timer (15m / 30m / 1h / 2h / none), elapsed time, countdown, I'm Safe, Extend, End, Alert contacts, SOS.
-- Planned Journey: optional destination, arrival time, check-in interval, grace period, location sharing.
-- Discreet check-ins: silent visual reminder, optional vibration, grace period, then one neutral escalation (no duplicates).
-- Trusted contacts: add/edit/remove, choose who gets alerts and location, consent status.
-- Help directory: official India/Telangana numbers (112, 181, 1098, 100, 108, Tele-MANAS 14416, etc.), verified before publishing, emergency vs non-emergency clearly split, one-tap call.
-- History with filters and delete-all; Settings for language (English / Hindi / Telugu), check-ins, sound/vibration (off by default), high contrast, large text, reduced motion, delete data.
-- All alerts are clearly labelled "Simulated — not sent".
+## Services, costs and credentials needed
+| Need | Service | Cost | Your action |
+|---|---|---|---|
+| Accounts, storage, scheduled checks | Lovable Cloud | Included usage, then pay-as-you-go | Approve turning it on |
+| SMS login codes (OTP) | Twilio Verify (or MessageBird/Vonage) | ~₹0.5–5 per SMS in India; India needs DLT registration for sender IDs | Create account, approve before any real SMS |
+| Alert SMS to contacts | Same provider | Per message | Explicit go-ahead before live sending |
+| Maps and walking routes | Google Maps Platform (Maps JS, Routes, Places) | Free monthly credit, then per request; billing account required | Create Google Cloud project, set budget alert |
+| CCTV locations | Official open-data portals only | Free | None; shown as "unavailable" where no verified data |
 
-## Phase 2 — Lovable Cloud
-- Sign-in; contacts, sessions and alerts stored privately per user.
-- Server-side scheduled check that escalates overdue sessions even if the page is closed.
-- Secure, expiring acknowledgement links for contacts (no location on public pages beyond what's authorized).
+## Stages (each approved separately)
+1. **Cloud + phone login** — turn on Lovable Cloud; +91 phone input, SMS code sign-in, resend cooldown, expiry, rate limits, sign-out, optional email recovery, phone change with re-verification. Works in test mode until the SMS provider is connected.
+2. **Profile and safety circle** — name/photo; invite contacts by secure expiring link; they must sign in and accept; per-contact choice of walk status / alerts / location; revoke anytime. Move existing on-device contacts into the account.
+3. **Quick Walk on the server** — walks and check-ins saved to the account; "I'm safe" confirmed only after save; extend, change destination, stop sharing, end with confirmation; safe retries.
+4. **Missed check-in escalation** — a server check runs every minute and escalates overdue walks even when the app is closed; one alert per missed check-in; stays simulated until you approve live SMS.
+5. **Guardian dashboard** — accepted contacts see only what was shared: walk status, last check-in, overdue state, location with age/accuracy; acknowledge alerts.
+6. **Google Maps routes** — destination search, walking routes, distance/time, open in Google Maps.
+7. **CCTV and public facilities** — import layer for approved datasets with source, licence and date; hospitals/police stations; nothing invented.
+8. **Privacy, offline, SOS polish** — network indicator, never show unsaved check-ins as done, location minimisation and retention, 112 wording reviewed.
+9. **Android** — only after the Capacitor project is present here; foreground location first, background only if you opt in.
 
-## Phase 3 — Real SMS/email
-- Requires a provider account (e.g. Twilio / MSG91) and your explicit go-ahead; stays sandboxed until then.
-
-## Honest limitations (will be in the final report)
-- Web apps cannot send GPS to 112 or place calls silently; we only open the dialer. ERSS integration requires official authorization.
-- Browsers cannot run in the background when closed; reliable background location/alerts need a native Android/iOS app.
+## Risks and honest limits
+- A website cannot track location or run timers once closed; the server escalation in stage 4 covers missed check-ins, but live location stops.
+- AEGIS cannot send location to 112; it only opens the dialer.
+- Recycled phone numbers: mitigated by re-verification and alerting the old email if set.
+- India SMS needs DLT registration, which can take days.
 
 ## Technical notes
-- TanStack Start routes: `/`, `/sos`, `/walk`, `/journey`, `/contacts`, `/help`, `/history`, `/settings`.
-- Phase 1 state in a typed local store (localStorage) behind a data layer so Phase 2 swaps to Cloud tables with RLS + a cron server route.
-- i18n via a typed dictionary; accessibility via CSS tokens toggled on `<html>`.
+- Tables with row-level security: profiles, contacts/invitations (hashed tokens), walks, check_ins, alerts, alert_recipients, location_points, user_roles.
+- Scheduled server route under /api/public/cron with a shared secret for escalation.
+- Phone OTP via Cloud phone auth with the chosen SMS provider; no codes stored by the app.
+- Existing store actions keep their shape so screens change minimally.
