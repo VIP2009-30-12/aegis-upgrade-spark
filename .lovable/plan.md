@@ -16,7 +16,7 @@
 
 ## Stage 1 in detail (first thing built after approval)
 - Turn on Lovable Cloud (no cost to start).
-- Add a "Sign in" entry in Settings and a small account badge in the header; nothing else changes. The app keeps working without an account ("Local mode"); signed-in shows "Cloud account".
+- Add a "Sign in" entry in Settings and a small account badge in the header; nothing else changes. Existing on-device data is never deleted or moved without asking. The app keeps working without an account ("Local mode"); signed-in shows "Cloud account".
 - New sign-in screen: country picker defaulting to +91, number check, 6-digit code screen with resend countdown, clear messages for wrong code, expired code, too many tries and SMS service down.
 - Codes are created, expired and rate-limited by Cloud's sign-in system; the app never stores them.
 - Until you connect and approve an SMS provider, sign-in runs in a clearly labelled **test mode** using fixed test numbers set in Cloud — no SMS is claimed to be sent.
