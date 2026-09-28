@@ -4,6 +4,7 @@ import { PageTitle, beep } from "@/components/aegis/AppShell";
 import { Choice, Toggle } from "@/components/aegis/Toggle";
 import { useAegis, updateSettings, deleteAll, requestLocation } from "@/lib/store";
 import { useT, type Lang } from "@/lib/i18n";
+import { useSession } from "@/lib/auth";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
@@ -29,9 +30,19 @@ function Sec({ title, children }: { title: string; children: ReactNode }) {
 function SettingsPage() {
   const t = useT();
   const s = useAegis((st) => st.settings);
+  const { user } = useSession();
   return (
     <div className="space-y-4">
       <PageTitle>{t("settings")}</PageTitle>
+      <Sec title={t("account")}>
+        <div className="space-y-2 py-3">
+          <p className={`chip ${user ? "chip-safe" : ""}`}>{user ? t("acc_cloud") : t("acc_local")}</p>
+          <p className="text-sm text-muted-foreground">{user ? t("account_cloud_body") : t("account_local_body")}</p>
+          {user
+            ? <Link to="/account" className="btn btn-soft w-full">{t("account")}</Link>
+            : <Link to="/auth" className="btn btn-safe w-full">{t("sign_in")}</Link>}
+        </div>
+      </Sec>
       <Sec title={t("language")}>
         <div className="py-3">
           <Choice<Lang> label={t("language")} value={s.lang} onChange={(lang) => updateSettings({ lang })}

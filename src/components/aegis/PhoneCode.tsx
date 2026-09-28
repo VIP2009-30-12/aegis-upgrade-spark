@@ -52,7 +52,7 @@ export function PhoneCodeForm({
           <input id="ph" className="field" inputMode="tel" autoComplete="tel-national" placeholder={t(phoneLabel)}
             value={raw} onChange={(e) => setRaw(e.target.value)} />
         </div>
-        {err && <p role="alert" className="text-sm text-danger">{t(err)}</p>}
+        {err && <p role="alert" className="text-sm text-destructive">{t(err)}</p>}
         <button className="btn btn-safe w-full" disabled={busy}>{t("send_code")}</button>
       </form>
     );
@@ -70,7 +70,7 @@ export function PhoneCodeForm({
       <label htmlFor="otp" className="text-sm font-semibold">{t("code_sent_to", { p: phone })}</label>
       <input id="otp" className="field text-center text-2xl tracking-[0.5em]" inputMode="numeric" autoComplete="one-time-code"
         maxLength={6} value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))} aria-label={t("code_label")} />
-      {err && <p role="alert" className="text-sm text-danger">{t(err)}</p>}
+      {err && <p role="alert" className="text-sm text-destructive">{t(err)}</p>}
       <button className="btn btn-safe w-full" disabled={busy || code.length !== 6}>{t("verify")}</button>
       <div className="flex justify-between text-sm">
         <button type="button" className="underline" onClick={() => { setPhone(null); setErr(null); }}>{t("change_number")}</button>
