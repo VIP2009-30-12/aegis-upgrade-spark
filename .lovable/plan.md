@@ -7,6 +7,24 @@
 - No Android (Capacitor) setup was found in this project, although the brief mentions one. If it lives in the GitHub repo only, it needs to be synced here before Android work.
 - No maps, no CCTV data, no guardian view.
 
+### Where each existing feature lives (kept as is, extended only)
+- SOS: `routes/sos.tsx`, `components/aegis/HoldSOS.tsx`, store `activateSOS` / `endSOS`.
+- Quick Walk / Planned Journey / check-ins: `routes/walk.tsx`, `routes/journey.tsx`, `routes/sessions.tsx`, `components/aegis/SessionPanel.tsx`, store `startSession`, `checkInSafe`, `extendTimer`, `endSession`, `escalateIfOverdue`.
+- Contacts: `routes/contacts.tsx`, store `saveContact` / `removeContact`.
+- Help: `routes/help.tsx`, `data/help.ts`. History: `routes/history.tsx`. Settings: `routes/settings.tsx`.
+- Languages: `lib/i18n.ts`. Navigation: `components/aegis/AppShell.tsx`.
+
+## Stage 1 in detail (first thing built after approval)
+- Turn on Lovable Cloud (no cost to start).
+- Add a "Sign in" entry in Settings and a small account badge in the header; nothing else changes. The app keeps working without an account ("Local mode"); signed-in shows "Cloud account".
+- New sign-in screen: country picker defaulting to +91, number check, 6-digit code screen with resend countdown, clear messages for wrong code, expired code, too many tries and SMS service down.
+- Codes are created, expired and rate-limited by Cloud's sign-in system; the app never stores them.
+- Until you connect and approve an SMS provider, sign-in runs in a clearly labelled **test mode** using fixed test numbers set in Cloud — no SMS is claimed to be sent.
+- Settings > Account: sign out, add optional recovery email (verified by link), change phone number (code sent to the new number), delete account.
+- A profile record and a separate roles table are created with access rules so each person sees only their own data.
+- All new text in English, Hindi and Telugu. SOS and help numbers stay usable signed out and offline.
+- After Stage 1 I report changes, tests actually run, remaining setup and limits, then wait for approval of Stage 2.
+
 ## Services, costs and credentials needed
 | Need | Service | Cost | Your action |
 |---|---|---|---|
