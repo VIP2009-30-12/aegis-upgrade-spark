@@ -35,7 +35,7 @@ export function normalizePhone(country: CountryCode, raw: string): string | null
 }
 
 /** Map sign-in errors to translated, user-meaningful messages. */
-export function authErrorKey(err: { code?: string; message?: string; status?: number } | null): TKey {
+export function authErrorKey(err: { code?: string | undefined; message?: string | undefined; status?: number | undefined } | null): TKey {
   const code = err?.code ?? "";
   const msg = (err?.message ?? "").toLowerCase();
   if (code === "otp_expired" || msg.includes("expired")) return "expired_code";
