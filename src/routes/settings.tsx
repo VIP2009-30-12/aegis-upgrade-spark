@@ -5,6 +5,9 @@ import { Choice, Toggle } from "@/components/aegis/Toggle";
 import { useAegis, updateSettings, deleteAll, requestLocation } from "@/lib/store";
 import { useT, type Lang } from "@/lib/i18n";
 import { useSession } from "@/lib/auth";
+import { useLocPermission } from "@/components/aegis/Location";
+import { deleteCloudHistory } from "@/lib/cloud";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
@@ -31,6 +34,7 @@ function SettingsPage() {
   const t = useT();
   const s = useAegis((st) => st.settings);
   const { user } = useSession();
+  const perm = useLocPermission();
   return (
     <div className="space-y-4">
       <PageTitle>{t("settings")}</PageTitle>
@@ -52,6 +56,12 @@ function SettingsPage() {
       <Sec title={t("privacy")}>
         <Toggle label={t("location_consent")} hint={t("location_explain")} checked={s.locationConsent}
           onChange={(v) => { updateSettings({ locationConsent: v }); if (v) void requestLocation(); }} />
+        <div className="space-y-1 py-3 text-sm">
+          <p>{t("loc_status")}: <b>{perm === "granted" ? t("loc_granted") : perm === "denied" ? t("loc_denied") : perm === "unsupported" ? t("loc_unsupported") : t("loc_prompt")}</b></p>
+          {perm === "denied" && <p className="text-xs text-muted-foreground">{t("loc_denied_help")}</p>}
+        </div>
+        <div className="space-y-1 py-3"><p className="text-sm font-semibold">{t("privacy_what")}</p><p className="text-xs text-muted-foreground">{t("privacy_what_body")}</p></div>
+        <div className="py-3"><Link to="/guardian" className="text-sm text-safe underline">{t("guardian_title")}</Link></div>
         <div className="py-3"><Link to="/contacts" className="text-sm text-safe underline">{t("contacts")}</Link></div>
       </Sec>
       <Sec title={t("checkins")}>
@@ -80,6 +90,7 @@ function SettingsPage() {
       </Sec>
       <Sec title={t("data")}>
         <div className="py-3">
+          {user && <button className="btn btn-outline mb-2 w-full" onClick={async () => { if (!confirm(t("confirm_del_cloud"))) return; try { await deleteCloudHistory(); toast(t("deleted")); } catch { toast.error(t("generic_error")); } }}>{t("del_cloud_history")}</button>}
           <button className="btn btn-danger w-full" onClick={() => { if (confirm(t("confirm_delete_all"))) deleteAll(); }}>{t("delete_all")}</button>
         </div>
       </Sec>

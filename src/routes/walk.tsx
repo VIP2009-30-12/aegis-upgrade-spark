@@ -5,6 +5,7 @@ import { SessionPanel } from "@/components/aegis/SessionPanel";
 import { Choice, Toggle } from "@/components/aegis/Toggle";
 import { useAegis, activeSession, startSession } from "@/lib/store";
 import { useT } from "@/lib/i18n";
+import { WalkMap } from "@/components/aegis/Location";
 
 export const Route = createFileRoute("/walk")({
   head: () => ({
@@ -30,6 +31,7 @@ function Walk() {
       <PageTitle>{t("quick_walk")}</PageTitle>
       {active.type !== "walk" && <p className="text-sm text-warning">{t("session_exists")}</p>}
       <SessionPanel full />
+      <WalkMap destination={active.destination} />
     </div>
   );
 
@@ -44,6 +46,7 @@ function Walk() {
         <Toggle label={t("share_location")} checked={share && settings.locationConsent} onChange={setShare}
           hint={settings.locationConsent ? t("share_location_hint") : t("loc_consent_off")} />
       </section>
+      <WalkMap />
       <button className="btn btn-safe h-14 w-full text-lg"
         onClick={() => startSession({ type: "walk", intervalMin: timer, graceMin: settings.graceMin, shareLocation: share && settings.locationConsent })}>
         {t("walk_start")}

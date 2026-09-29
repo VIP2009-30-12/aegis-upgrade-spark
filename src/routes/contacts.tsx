@@ -6,6 +6,7 @@ import { PageTitle } from "@/components/aegis/AppShell";
 import { Toggle } from "@/components/aegis/Toggle";
 import { useAegis, saveContact, removeContact, type Contact } from "@/lib/store";
 import { useT } from "@/lib/i18n";
+import { SafetyCircle } from "@/components/aegis/SafetyCircle";
 
 export const Route = createFileRoute("/contacts")({
   head: () => ({
@@ -67,6 +68,7 @@ function Contacts() {
   return (
     <div className="space-y-4">
       <PageTitle sub={t("contacts_local")}>{t("contacts")}</PageTitle>
+      <SafetyCircle />
       {editing ? <Editor initial={editing} onDone={() => setEditing(null)} /> : (
         <button className="btn btn-safe w-full" onClick={() => setEditing(blank)}><UserPlus className="size-4" aria-hidden />{t("add_contact")}</button>
       )}

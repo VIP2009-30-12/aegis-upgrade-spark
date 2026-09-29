@@ -21,6 +21,13 @@ function Help() {
   return (
     <div className="space-y-6">
       <PageTitle sub={t("help_note")}>{t("help")}</PageTitle>
+      <section className="space-y-2">
+        <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">{t("support_title")}</h2>
+        <p className="text-sm text-muted-foreground">{t("support_intro")}</p>
+        {(["consent", "coercion", "plan", "after", "services"] as const).map((k) => (
+          <details key={k} className="card-aegis p-3"><summary className="cursor-pointer font-semibold">{t(`s_${k}_t`)}</summary><p className="mt-2 text-sm">{t(`s_${k}_b`)}</p></details>
+        ))}
+      </section>
       {HELP.map((sec) => (
         <section key={sec.key} className="space-y-2">
           <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">{t(sec.key)}</h2>
