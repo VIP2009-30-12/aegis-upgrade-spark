@@ -141,7 +141,7 @@ export async function createInvite(p: { name: string; relationship: string; perm
   return `${window.location.origin}/invite/${token}`;
 }
 export async function setPerm(id: string, perm: Perm, value: boolean) {
-  const { error } = await supabase.from("circle_members").update({ [perm]: value }).eq("id", id);
+  const { error } = await supabase.from("circle_members").update({ [perm]: value } as Record<Perm, boolean>).eq("id", id);
   if (error) throw error;
 }
 export async function revokeMember(id: string) {
