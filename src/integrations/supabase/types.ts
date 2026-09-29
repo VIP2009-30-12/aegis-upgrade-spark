@@ -14,6 +14,89 @@ export type Database = {
   }
   public: {
     Tables: {
+      check_ins: {
+        Row: {
+          at: string
+          id: string
+          user_id: string
+          walk_id: string
+        }
+        Insert: {
+          at?: string
+          id: string
+          user_id?: string
+          walk_id: string
+        }
+        Update: {
+          at?: string
+          id?: string
+          user_id?: string
+          walk_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "check_ins_walk_id_fkey"
+            columns: ["walk_id"]
+            isOneToOne: false
+            referencedRelation: "walks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      circle_members: {
+        Row: {
+          accepted_at: string | null
+          created_at: string
+          expires_at: string
+          id: string
+          member_id: string | null
+          name: string
+          owner_id: string
+          perm_alerts: boolean
+          perm_checkins: boolean
+          perm_location: boolean
+          perm_walk: boolean
+          relationship: string
+          status: string
+          token_hash: string
+          updated_at: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          member_id?: string | null
+          name: string
+          owner_id?: string
+          perm_alerts?: boolean
+          perm_checkins?: boolean
+          perm_location?: boolean
+          perm_walk?: boolean
+          relationship?: string
+          status?: string
+          token_hash: string
+          updated_at?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          member_id?: string | null
+          name?: string
+          owner_id?: string
+          perm_alerts?: boolean
+          perm_checkins?: boolean
+          perm_location?: boolean
+          perm_walk?: boolean
+          relationship?: string
+          status?: string
+          token_hash?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -53,11 +136,135 @@ export type Database = {
         }
         Relationships: []
       }
+      walk_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          created_at: string
+          due_at: string
+          id: string
+          kind: string
+          member_id: string
+          status: string
+          user_id: string
+          walk_id: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          created_at?: string
+          due_at: string
+          id?: string
+          kind?: string
+          member_id: string
+          status?: string
+          user_id: string
+          walk_id: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          created_at?: string
+          due_at?: string
+          id?: string
+          kind?: string
+          member_id?: string
+          status?: string
+          user_id?: string
+          walk_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "walk_alerts_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "circle_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "walk_alerts_walk_id_fkey"
+            columns: ["walk_id"]
+            isOneToOne: false
+            referencedRelation: "walks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      walks: {
+        Row: {
+          created_at: string
+          destination: string | null
+          ended_at: string | null
+          escalated_for: string | null
+          eta: string | null
+          grace_min: number
+          id: string
+          interval_min: number | null
+          last_checkin_at: string | null
+          loc_acc: number | null
+          loc_at: string | null
+          loc_lat: number | null
+          loc_lng: number | null
+          next_checkin_at: string | null
+          share_location: boolean
+          started_at: string
+          status: string
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          destination?: string | null
+          ended_at?: string | null
+          escalated_for?: string | null
+          eta?: string | null
+          grace_min?: number
+          id: string
+          interval_min?: number | null
+          last_checkin_at?: string | null
+          loc_acc?: number | null
+          loc_at?: string | null
+          loc_lat?: number | null
+          loc_lng?: number | null
+          next_checkin_at?: string | null
+          share_location?: boolean
+          started_at?: string
+          status?: string
+          type: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          destination?: string | null
+          ended_at?: string | null
+          escalated_for?: string | null
+          eta?: string | null
+          grace_min?: number
+          id?: string
+          interval_min?: number | null
+          last_checkin_at?: string | null
+          loc_acc?: number | null
+          loc_at?: string | null
+          loc_lat?: number | null
+          loc_lng?: number | null
+          next_checkin_at?: string | null
+          share_location?: boolean
+          started_at?: string
+          status?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      accept_invite: { Args: { p_token: string }; Returns: Json }
+      ack_alert: { Args: { p_id: string }; Returns: boolean }
+      escalate_overdue: { Args: never; Returns: number }
+      guardian_overview: { Args: never; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -65,6 +272,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      leave_circle: { Args: { p_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
