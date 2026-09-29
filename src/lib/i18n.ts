@@ -1,4 +1,5 @@
 import { useAegis } from "./store";
+import { moreEn, moreHi, moreTe } from "./i18n-more";
 
 export type Lang = "en" | "hi" | "te";
 
