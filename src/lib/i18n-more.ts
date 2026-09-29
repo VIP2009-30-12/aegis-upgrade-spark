@@ -33,7 +33,7 @@ export const moreEn = {
   g_alerts: "Missed check-in alerts", ack: "I've seen this", acked: "Acknowledged", g_sim: "Simulated. No message was sent to your phone.",
   leave: "Leave this circle", confirm_leave: "Leave this Safety Circle? You'll stop seeing their updates.", g_updated: "Updated {t}", never: "Never",
   // sync
-  sync_local: "Saved on this phone only", sync_saving: "Saving to cloud…", sync_saved: "Saved to cloud", sync_failed: "Not saved to cloud", sync_offline: "Offline. Will save when you're back online", retry: "Try again",
+  sync_local: "Saved on this phone only", sync_saving: "Saving to cloud…", sync_saved: "Saved to cloud", sync_failed: "Not saved to cloud", sync_offline: "Offline. Will save when you're back online",
   // maps
   map_title: "Map", maps_unconfigured: "In-app walking routes aren't set up yet (needs Google Maps). You can still open directions in Google Maps.",
   directions_gmaps: "Walking directions in Google Maps", route_note: "Routes come from Google Maps. AEGIS doesn't rate any route as safe.", nearby_link: "Nearby public facilities",
@@ -87,7 +87,7 @@ export const moreHi: Record<K, string> = {
   g_location: "साझा लोकेशन", g_loc_age: "{a} पहले · ±{m} मी", g_no_loc: "लोकेशन साझा नहीं या उपलब्ध नहीं", g_stale: "पुरानी हो सकती है",
   g_alerts: "छूटे चेक-इन की चेतावनियाँ", ack: "मैंने देख लिया", acked: "देख लिया गया", g_sim: "सिम्युलेटेड — आपके फ़ोन पर कोई संदेश नहीं भेजा गया।",
   leave: "यह सर्कल छोड़ें", confirm_leave: "यह सेफ़्टी सर्कल छोड़ें? आपको उनके अपडेट दिखना बंद हो जाएँगे।", g_updated: "{t} को अपडेट", never: "कभी नहीं",
-  sync_local: "सिर्फ़ इस फ़ोन पर सेव", sync_saving: "क्लाउड में सेव हो रहा है…", sync_saved: "क्लाउड में सेव हुआ", sync_failed: "क्लाउड में सेव नहीं हुआ", sync_offline: "ऑफ़लाइन — ऑनलाइन होने पर सेव होगा", retry: "फिर कोशिश करें",
+  sync_local: "सिर्फ़ इस फ़ोन पर सेव", sync_saving: "क्लाउड में सेव हो रहा है…", sync_saved: "क्लाउड में सेव हुआ", sync_failed: "क्लाउड में सेव नहीं हुआ", sync_offline: "ऑफ़लाइन — ऑनलाइन होने पर सेव होगा",
   map_title: "मैप", maps_unconfigured: "ऐप में पैदल रास्ते अभी सेट नहीं हैं (Google Maps चाहिए)। आप Google Maps में दिशा-निर्देश खोल सकती हैं।",
   directions_gmaps: "Google Maps में पैदल दिशा", route_note: "रास्ते Google Maps से आते हैं। AEGIS किसी रास्ते को सुरक्षित नहीं बताता।", nearby_link: "पास की सार्वजनिक सुविधाएँ",
   map_no_loc: "आपकी लोकेशन उपलब्ध नहीं है। मैप देखने के लिए लोकेशन की अनुमति दें।",
@@ -136,7 +136,7 @@ export const moreTe: Record<K, string> = {
   g_location: "పంచుకున్న లొకేషన్", g_loc_age: "{a} క్రితం · ±{m} మీ", g_no_loc: "లొకేషన్ పంచుకోలేదు లేదా అందుబాటులో లేదు", g_stale: "పాతది కావచ్చు",
   g_alerts: "తప్పిన చెక్-ఇన్ హెచ్చరికలు", ack: "నేను చూశాను", acked: "చూశారు", g_sim: "సిమ్యులేటెడ్ — మీ ఫోన్‌కు ఏ సందేశం పంపబడలేదు.",
   leave: "ఈ సర్కిల్ వదిలేయి", confirm_leave: "ఈ సేఫ్టీ సర్కిల్ వదిలేయాలా? వారి అప్‌డేట్‌లు కనిపించవు.", g_updated: "{t} కి అప్‌డేట్", never: "ఎప్పుడూ లేదు",
-  sync_local: "ఈ ఫోన్‌లో మాత్రమే సేవ్", sync_saving: "క్లౌడ్‌లో సేవ్ అవుతోంది…", sync_saved: "క్లౌడ్‌లో సేవ్ అయింది", sync_failed: "క్లౌడ్‌లో సేవ్ కాలేదు", sync_offline: "ఆఫ్‌లైన్ — ఆన్‌లైన్ అయ్యాక సేవ్ అవుతుంది", retry: "మళ్లీ ప్రయత్నించు",
+  sync_local: "ఈ ఫోన్‌లో మాత్రమే సేవ్", sync_saving: "క్లౌడ్‌లో సేవ్ అవుతోంది…", sync_saved: "క్లౌడ్‌లో సేవ్ అయింది", sync_failed: "క్లౌడ్‌లో సేవ్ కాలేదు", sync_offline: "ఆఫ్‌లైన్ — ఆన్‌లైన్ అయ్యాక సేవ్ అవుతుంది",
   map_title: "మ్యాప్", maps_unconfigured: "యాప్‌లో నడక మార్గాలు ఇంకా సెట్ కాలేదు (Google Maps అవసరం). Google Maps లో దిశలు తెరవవచ్చు.",
   directions_gmaps: "Google Maps లో నడక దిశలు", route_note: "మార్గాలు Google Maps నుండి వస్తాయి. AEGIS ఏ మార్గాన్నీ సురక్షితమని చెప్పదు.", nearby_link: "దగ్గరలోని పబ్లిక్ సదుపాయాలు",
   map_no_loc: "మీ లొకేషన్ అందుబాటులో లేదు. మ్యాప్ చూడటానికి లొకేషన్ అనుమతించండి.",
