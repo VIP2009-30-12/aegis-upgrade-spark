@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { Home, ShieldCheck, LifeBuoy, History, Settings as Cog, FlaskConical, UserRound, Smartphone } from "lucide-react";
+import { Home, ShieldCheck, LifeBuoy, History, MapPin, Settings as Cog, FlaskConical, UserRound, Smartphone } from "lucide-react";
 import { useSession } from "@/lib/auth";
 import { useAegis, activeSession, checkInSafe, extendTimer, escalateIfOverdue, endSession } from "@/lib/store";
 import { useT } from "@/lib/i18n";
 import { useNow } from "./useNow";
 import { useNavigate } from "@tanstack/react-router";
+import { useCloudSync } from "@/lib/cloud";
+import { LocationOnboarding, OfflineBanner, useLocPermission } from "./Location";
 
 function useA11ySync() {
   const s = useAegis((st) => st.settings);
@@ -73,9 +75,13 @@ export { beep };
 export function AppShell({ children }: { children: ReactNode }) {
   const t = useT();
   useA11ySync();
+  const { user } = useSession();
+  useCloudSync(!!user);
+  useLocPermission();
   const items = [
     { to: "/", icon: Home, label: t("nav_home") },
     { to: "/sessions", icon: ShieldCheck, label: t("nav_sessions") },
+    { to: "/nearby", icon: MapPin, label: t("nav_nearby") },
     { to: "/help", icon: LifeBuoy, label: t("nav_help") },
     { to: "/history", icon: History, label: t("nav_history") },
     { to: "/settings", icon: Cog, label: t("nav_settings") },
@@ -86,11 +92,13 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="flex items-center justify-center gap-2 border-b bg-surface px-3 py-1.5 text-xs text-warning">
         <FlaskConical className="size-3.5" aria-hidden /> {t("sandbox")}
       </div>
+      <OfflineBanner />
       <AccountBadge />
+      <LocationOnboarding />
       <main id="main" className="mx-auto w-full max-w-xl px-4 pt-5">{children}</main>
       <CheckInMonitor />
       <nav aria-label="Main" className="fixed inset-x-0 bottom-0 z-40 border-t bg-surface/95 backdrop-blur">
-        <ul className="mx-auto grid max-w-xl grid-cols-5">
+        <ul className="mx-auto grid max-w-xl grid-cols-6">
           {items.map(({ to, icon: Icon, label }) => (
             <li key={to}>
               <Link
