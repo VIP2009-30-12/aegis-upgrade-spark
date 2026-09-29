@@ -36,7 +36,7 @@ export type LogEvent = { id: string; type: EventType; at: number; alertId?: stri
 export type Settings = {
   lang: Lang; locationConsent: boolean; defaultInterval: number; graceMin: number;
   vibration: boolean; sound: boolean; highContrast: boolean; largeText: boolean; reducedMotion: boolean;
-  simulateFailure: boolean;
+  simulateFailure: boolean; onboarded: boolean;
 };
 export type State = {
   settings: Settings; contacts: Contact[]; sessions: Session[]; alerts: Alert[];
@@ -48,7 +48,7 @@ const defaults = (): State => ({
   settings: {
     lang: "en", locationConsent: false, defaultInterval: 30, graceMin: 5,
     vibration: false, sound: false, highContrast: false, largeText: false, reducedMotion: false,
-    simulateFailure: false,
+    simulateFailure: false, onboarded: false,
   },
   contacts: [], sessions: [], alerts: [], sos: [], log: [], lastKnown: null,
 });
@@ -84,6 +84,16 @@ export function useAegis<T>(sel: (s: State) => T): T {
 }
 
 const uid = () => crypto.randomUUID();
+
+// ---------- cloud sync hook (Stage 3) ----------
+export type SyncEvent = { kind: "upsert"; session: Session } | { kind: "checkin"; session: Session; id: string };
+const syncHooks = new Set<(e: SyncEvent) => void>();
+export function onSessionEvent(fn: (e: SyncEvent) => void) { syncHooks.add(fn); return () => { syncHooks.delete(fn); }; }
+function emit(id: string | undefined, checkinId?: string) {
+  const s = load().sessions.find((x) => x.id === id);
+  if (!s) return;
+  syncHooks.forEach((h) => h(checkinId ? { kind: "checkin", session: s, id: checkinId } : { kind: "upsert", session: s }));
+}
 const log = (s: State, e: Omit<LogEvent, "id">): State => ({ ...s, log: [{ id: uid(), ...e }, ...s.log] });
 
 // ---------- settings ----------
@@ -140,6 +150,8 @@ export function requestLocation(timeoutMs = 15000): Promise<Loc | null> {
       (p) => {
         const loc = { lat: p.coords.latitude, lng: p.coords.longitude, acc: Math.round(p.coords.accuracy), at: p.timestamp || Date.now() };
         set((s) => ({ ...s, lastKnown: loc }));
+        const a = activeSession(load());
+        if (a?.shareLocation) emit(a.id);
         resolve(loc);
       },
       () => resolve(null),
@@ -204,13 +216,15 @@ export function startSession(p: {
 }): boolean {
   if (activeSession(load())) return false;
   const now = Date.now();
+  const sid = uid();
   set((s) => log({
     ...s,
     sessions: [{
-      id: uid(), status: "active", startedAt: now, escalatedFor: null,
+      id: sid, status: "active", startedAt: now, escalatedFor: null,
       nextCheckInAt: p.intervalMin ? now + p.intervalMin * 60000 : null, ...p,
     }, ...s.sessions],
   }, { type: "session_start", at: now, sessionType: p.type }));
+  emit(sid);
   if (p.shareLocation && load().settings.locationConsent) void requestLocation();
   return true;
 }
@@ -222,15 +236,29 @@ export function checkInSafe() {
   if (!s) return;
   patchActive((x) => ({ ...x, nextCheckInAt: x.intervalMin ? Date.now() + x.intervalMin * 60000 : null, escalatedFor: null }));
   set((st) => log(st, { type: "checkin", at: Date.now(), sessionType: s.type }));
+  emit(s.id, uid());
 }
 export function extendTimer(min = 15) {
+  const id = activeSession(load())?.id;
   patchActive((x) => ({ ...x, nextCheckInAt: Math.max(x.nextCheckInAt ?? Date.now(), Date.now()) + min * 60000, escalatedFor: null }));
+  emit(id);
+}
+export function setDestination(destination: string | undefined) {
+  const id = activeSession(load())?.id;
+  patchActive((x) => ({ ...x, destination }));
+  emit(id);
+}
+export function stopSharing() {
+  const id = activeSession(load())?.id;
+  patchActive((x) => ({ ...x, shareLocation: false }));
+  emit(id);
 }
 export function endSession(status: "completed" | "cancelled") {
   const s = activeSession(load());
   if (!s) return;
   patchActive((x) => ({ ...x, status, endedAt: Date.now(), nextCheckInAt: null }));
   set((st) => log(st, { type: status === "completed" ? "session_end" : "session_cancel", at: Date.now(), sessionType: s.type }));
+  emit(s.id);
 }
 /** Called by the in-app monitor. Escalates once per missed check-in. */
 export function escalateIfOverdue(now: number): boolean {

@@ -13,14 +13,17 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ContactsRouteImport } from './routes/contacts'
+import { Route as GuardianRouteImport } from './routes/guardian'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as JourneyRouteImport } from './routes/journey'
+import { Route as NearbyRouteImport } from './routes/nearby'
 import { Route as SessionsRouteImport } from './routes/sessions'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SosRouteImport } from './routes/sos'
 import { Route as WalkRouteImport } from './routes/walk'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
+import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -41,6 +44,11 @@ const ContactsRoute = ContactsRouteImport.update({
   path: '/contacts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuardianRoute = GuardianRouteImport.update({
+  id: '/guardian',
+  path: '/guardian',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HelpRoute = HelpRouteImport.update({
   id: '/help',
   path: '/help',
@@ -54,6 +62,11 @@ const HistoryRoute = HistoryRouteImport.update({
 const JourneyRoute = JourneyRouteImport.update({
   id: '/journey',
   path: '/journey',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NearbyRoute = NearbyRouteImport.update({
+  id: '/nearby',
+  path: '/nearby',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SessionsRoute = SessionsRouteImport.update({
@@ -81,32 +94,43 @@ const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const InviteTokenRoute = InviteTokenRouteImport.update({
+  id: '/invite/$token',
+  path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/contacts': typeof ContactsRoute
+  '/guardian': typeof GuardianRoute
   '/help': typeof HelpRoute
   '/history': typeof HistoryRoute
   '/journey': typeof JourneyRoute
+  '/nearby': typeof NearbyRoute
   '/sessions': typeof SessionsRoute
   '/settings': typeof SettingsRoute
   '/sos': typeof SosRoute
   '/walk': typeof WalkRoute
   '/account': typeof AuthenticatedAccountRoute
+  '/invite/$token': typeof InviteTokenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/contacts': typeof ContactsRoute
+  '/guardian': typeof GuardianRoute
   '/help': typeof HelpRoute
   '/history': typeof HistoryRoute
   '/journey': typeof JourneyRoute
+  '/nearby': typeof NearbyRoute
   '/sessions': typeof SessionsRoute
   '/settings': typeof SettingsRoute
   '/sos': typeof SosRoute
   '/walk': typeof WalkRoute
   '/account': typeof AuthenticatedAccountRoute
+  '/invite/$token': typeof InviteTokenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -114,14 +138,17 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/contacts': typeof ContactsRoute
+  '/guardian': typeof GuardianRoute
   '/help': typeof HelpRoute
   '/history': typeof HistoryRoute
   '/journey': typeof JourneyRoute
+  '/nearby': typeof NearbyRoute
   '/sessions': typeof SessionsRoute
   '/settings': typeof SettingsRoute
   '/sos': typeof SosRoute
   '/walk': typeof WalkRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
+  '/invite/$token': typeof InviteTokenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -129,41 +156,50 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/contacts'
+    | '/guardian'
     | '/help'
     | '/history'
     | '/journey'
+    | '/nearby'
     | '/sessions'
     | '/settings'
     | '/sos'
     | '/walk'
     | '/account'
+    | '/invite/$token'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/contacts'
+    | '/guardian'
     | '/help'
     | '/history'
     | '/journey'
+    | '/nearby'
     | '/sessions'
     | '/settings'
     | '/sos'
     | '/walk'
     | '/account'
+    | '/invite/$token'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
     | '/contacts'
+    | '/guardian'
     | '/help'
     | '/history'
     | '/journey'
+    | '/nearby'
     | '/sessions'
     | '/settings'
     | '/sos'
     | '/walk'
     | '/_authenticated/account'
+    | '/invite/$token'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -171,13 +207,16 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ContactsRoute: typeof ContactsRoute
+  GuardianRoute: typeof GuardianRoute
   HelpRoute: typeof HelpRoute
   HistoryRoute: typeof HistoryRoute
   JourneyRoute: typeof JourneyRoute
+  NearbyRoute: typeof NearbyRoute
   SessionsRoute: typeof SessionsRoute
   SettingsRoute: typeof SettingsRoute
   SosRoute: typeof SosRoute
   WalkRoute: typeof WalkRoute
+  InviteTokenRoute: typeof InviteTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -210,6 +249,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guardian': {
+      id: '/guardian'
+      path: '/guardian'
+      fullPath: '/guardian'
+      preLoaderRoute: typeof GuardianRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/help': {
       id: '/help'
       path: '/help'
@@ -229,6 +275,13 @@ declare module '@tanstack/react-router' {
       path: '/journey'
       fullPath: '/journey'
       preLoaderRoute: typeof JourneyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nearby': {
+      id: '/nearby'
+      path: '/nearby'
+      fullPath: '/nearby'
+      preLoaderRoute: typeof NearbyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sessions': {
@@ -266,6 +319,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAccountRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -285,13 +345,16 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ContactsRoute: ContactsRoute,
+  GuardianRoute: GuardianRoute,
   HelpRoute: HelpRoute,
   HistoryRoute: HistoryRoute,
   JourneyRoute: JourneyRoute,
+  NearbyRoute: NearbyRoute,
   SessionsRoute: SessionsRoute,
   SettingsRoute: SettingsRoute,
   SosRoute: SosRoute,
   WalkRoute: WalkRoute,
+  InviteTokenRoute: InviteTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

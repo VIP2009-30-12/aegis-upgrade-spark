@@ -16,3 +16,7 @@
 - Accounts are optional: session via `useSession` in `src/lib/auth.ts`; only `/account` sits under `_authenticated/`, so SOS/help never require login.
 - Profiles are created client-side on first sign-in (upsert own row under RLS), not via triggers on auth tables.
 - Account deletion runs in `src/lib/account.functions.ts` with the verified session user id only.
+- Cloud mirroring of walks/check-ins lives in `src/lib/cloud.ts` (store emits events via `onSessionEvent`; client uuids make retries idempotent) so local mode stays untouched.
+- Guardians read only through security-definer RPCs (`guardian_overview`, `ack_alert`, `accept_invite`, `leave_circle`), never direct table access, so permissions are enforced server-side.
+- Missed check-ins are escalated by the SQL function `escalate_overdue()` on a 1-minute schedule; unique (walk, due, member) prevents duplicates.
+- Facility/CCTV data only from `src/data/facilities.ts` verified datasets; empty means "unavailable", never sample points.

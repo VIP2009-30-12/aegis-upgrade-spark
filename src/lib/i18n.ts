@@ -1,4 +1,5 @@
 import { useAegis } from "./store";
+import { moreEn, moreHi, moreTe } from "./i18n-more";
 
 export type Lang = "en" | "hi" | "te";
 
@@ -76,6 +77,7 @@ const en = {
   account_deleted: "Your account was deleted.", recovery_signin: "Lost your number?", recovery_signin_hint: "If you added a recovery email, we can email you a sign-in link.",
   email_label: "Email", send_link: "Send sign-in link", link_sent_generic: "If that email belongs to an account, a sign-in link is on its way.",
   offline: "You are offline. Sign-in needs internet; SOS and help numbers still work.",
+  ...moreEn,
 } as const;
 
 export type TKey = keyof typeof en;
@@ -155,6 +157,7 @@ const hi: Dict = {
   account_deleted: "आपका खाता हटा दिया गया।", recovery_signin: "नंबर खो गया?", recovery_signin_hint: "अगर आपने रिकवरी ईमेल जोड़ा है, तो हम साइन-इन लिंक ईमेल कर सकते हैं।",
   email_label: "ईमेल", send_link: "साइन-इन लिंक भेजें", link_sent_generic: "अगर यह ईमेल किसी खाते का है, तो साइन-इन लिंक भेजा जा रहा है।",
   offline: "आप ऑफ़लाइन हैं। साइन इन के लिए इंटरनेट चाहिए; SOS और हेल्प नंबर अब भी काम करते हैं।",
+  ...moreHi,
 };
 
 const te: Dict = {
@@ -231,6 +234,7 @@ const te: Dict = {
   account_deleted: "మీ ఖాతా తొలగించబడింది.", recovery_signin: "నంబర్ పోయిందా?", recovery_signin_hint: "మీరు రికవరీ ఈమెయిల్ జోడించి ఉంటే, సైన్-ఇన్ లింక్ ఈమెయిల్ చేయగలము.",
   email_label: "ఈమెయిల్", send_link: "సైన్-ఇన్ లింక్ పంపు", link_sent_generic: "ఆ ఈమెయిల్ ఏదైనా ఖాతాకు చెందితే, సైన్-ఇన్ లింక్ వస్తోంది.",
   offline: "మీరు ఆఫ్‌లైన్‌లో ఉన్నారు. సైన్ ఇన్‌కు ఇంటర్నెట్ అవసరం; SOS మరియు సహాయ నంబర్లు ఇంకా పనిచేస్తాయి.",
+  ...moreTe,
 };
 
 const dicts: Record<Lang, Dict> = { en, hi, te };

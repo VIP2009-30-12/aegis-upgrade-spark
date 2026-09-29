@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ShieldCheck, Clock, Timer } from "lucide-react";
-import { useAegis, activeSession, checkInSafe, extendTimer, endSession, sendManualAlert } from "@/lib/store";
+import { useAegis, activeSession, checkInSafe, extendTimer, endSession, sendManualAlert, stopSharing } from "@/lib/store";
+import { useSyncStatus, flush } from "@/lib/cloud";
 import { useT } from "@/lib/i18n";
 import { fmtDuration, osmEmbed, mapLink } from "@/lib/format";
 import { useNow } from "./useNow";
@@ -14,6 +15,7 @@ export function SessionPanel({ full = false }: { full?: boolean }) {
   const s = useAegis(activeSession);
   const lastKnown = useAegis((st) => st.lastKnown);
   const consent = useAegis((st) => st.settings.locationConsent);
+  const sync = useSyncStatus(s?.id);
   if (!s) return null;
   const elapsed = now ? now - s.startedAt : 0;
   const left = s.nextCheckInAt && now ? s.nextCheckInAt - now : null;
@@ -29,6 +31,10 @@ export function SessionPanel({ full = false }: { full?: boolean }) {
         </div>
         <span className={overdue ? "chip chip-warn" : "chip chip-safe"}>{overdue ? t("checkin_due") : t("active_session")}</span>
       </div>
+      <p className="flex items-center gap-2 text-xs" role="status">
+        <span className={`chip ${sync === "saved" ? "chip-safe" : sync === "failed" || sync === "offline" ? "chip-warn" : ""}`}>{t(`sync_${sync}`)}</span>
+        {sync === "failed" && <button className="underline" onClick={() => void flush()}>{t("retry")}</button>}
+      </p>
       {s.destination && <p className="text-sm">📍 {s.destination}{s.eta ? ` · ${s.eta}` : ""}</p>}
       {!s.destination && s.eta && <p className="text-sm">{t("eta")}: {s.eta}</p>}
       <div className="grid grid-cols-2 gap-3">
@@ -60,6 +66,7 @@ export function SessionPanel({ full = false }: { full?: boolean }) {
               </a>
             </div>
           )}
+          {s.shareLocation && <button className="btn btn-outline w-full" onClick={() => stopSharing()}>{t("stop_sharing")}</button>}
           <button className="btn btn-warn w-full" onClick={() => { sendManualAlert(s.id); toast(t("alert_sent_sim")); }}>
             {t("alert_contacts")}
           </button>
